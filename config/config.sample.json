@@ -1,0 +1,15 @@
+{
+  "db": {
+    "host": "localhost",
+    "db": "db_name",
+    "charset": "utf8mb4",
+    "user": "user",
+    "pass": "pass"
+  },
+  "auth": {
+    "token": {
+      "key": "key",
+      "expires": 2592000
+    }
+  }
+}
