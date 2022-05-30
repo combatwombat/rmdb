@@ -10,10 +10,12 @@ class RTF {
 
     public $container;
     public $router;
+    public $cli;
 
     public function __construct() {
         $this->container = new \RTF\Container();
         $this->router = new \RTF\Router($this->container);
+        $this->cli = new \RTF\CLI($this->container);
     }
 
 
@@ -55,8 +57,17 @@ class RTF {
         $this->router->trace($regex, $callbacks);
     }
 
+    public function cli($command, $callbacks) {
+        $this->cli->add($command, $callbacks);
+    }
+
     public function run($basePath = '/') {
-        $this->router->route($basePath);
+        if (php_sapi_name() == 'cli') {
+            $this->cli->execute();
+        } else {
+            $this->router->route($basePath);
+        }
+
     }
 }
 

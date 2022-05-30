@@ -63,6 +63,7 @@ class Router {
         $this->add($regex, 'trace', $callbacks);
     }
 
+
     // Error responses
     public static function addErrorResponse($code, $callback) {
         self::$errorResponses[$code] = $callback;
@@ -156,8 +157,6 @@ class Router {
                 $controller = new Controller($this->container);
                 return call_user_func_array(\Closure::bind($callback, $controller), $params);
             }
-
-
 
             return call_user_func_array($callback, $params);
 

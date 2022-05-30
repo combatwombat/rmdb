@@ -1,6 +1,5 @@
 <?php
 
-echo '<pre>';
 
 $app = require __DIR__ . '/../lib/RTF.php';
 
@@ -11,9 +10,14 @@ $app->container->set("db", function($container) {
 });
 
 
+$app->cli('import', 'CLI\IMDbImport');
+$app->cli('download', 'CLI\IMDbImport@download');
+$app->cli('extract', 'CLI\IMDbImport@extract');
 
 
-
+$app->cli('test', function($a, $b) {
+    echo $a . " - ". $b . "\n";
+});
 
 $app->run();
 
