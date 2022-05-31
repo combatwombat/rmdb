@@ -94,7 +94,7 @@ class IMDbImport extends \RTF\Controller {
                     'death_year'    => intval($data['3']) != 0 ? intval($data['3']) : null,
                 ];
 
-                if ($row % 100 == 0) {
+                if ($row % 10000 == 0) {
                     $this->db->insertMulti("names", $inserts);
                     $inserts = [];
                 }
@@ -118,7 +118,7 @@ class IMDbImport extends \RTF\Controller {
                 $this->db->insertMulti("names", $inserts);
             }
 
-            echo "\nInserted " . ($row - 1) . " Names\n";
+            echo "\nInserted " . $row . " Names\n";
         }
 
     }
