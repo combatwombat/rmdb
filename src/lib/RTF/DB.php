@@ -6,7 +6,7 @@ use PDO;
 
 class DB {
 
-    private $pdo;
+    public $pdo;
 
     function __construct($db, $user, $pass, $host = 'localhost', $charset = 'utf8mb4') {
         $dsn = "mysql:host=".$host.";dbname=".$db.";charset=" . $charset;
@@ -169,6 +169,36 @@ class DB {
         $st = $this->pdo->prepare($sql);
         $st->execute($valuesArr);
         return $this->pdo->lastInsertId();
+    }
+
+    public function insertMulti($table, $valuesArr) {
+
+        $columnNames = [];
+        foreach ($valuesArr[0] as $key => $value) {
+            $columnNames[] = $key;
+        }
+
+        $sql = "INSERT INTO `" . $table . "` (" . implode(",", $columnNames) . ") VALUES ";
+
+        $pdoValuesArr = [];
+        $valuesPlaceholderStrings = [];
+        foreach ($valuesArr as $values) {
+
+            $valuesPlaceHolderArr = [];
+            foreach ($values as $key => $value) {
+                $pdoValuesArr[] = $value;
+                $valuesPlaceHolderArr[] = '?';
+            }
+
+            $valuesPlaceholderStrings[] = '(' . implode(",", $valuesPlaceHolderArr) . ')';
+        }
+        $valuesPlaceholderString = implode(",", $valuesPlaceholderStrings);
+
+        $sql .= $valuesPlaceholderString;
+
+        $st = $this->pdo->prepare($sql);
+
+        return $st->execute($pdoValuesArr);
     }
 
     /**

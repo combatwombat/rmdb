@@ -55,6 +55,8 @@ class CLI {
             if (strpos($callback, '@') !== false) {
                 $arr = explode("@", $callback);
                 $controller = new $arr[0]($this->container);
+
+
                 call_user_func_array([$controller, $arr[1]], $params);
 
             } else {

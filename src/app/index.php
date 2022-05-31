@@ -4,19 +4,20 @@
 $app = require __DIR__ . '/../lib/RTF.php';
 
 $app->container->set('config', '\RTF\Config');
+$app->container->set('helper', '\RTF\Helper');
 
 $app->container->set("db", function($container) {
     return new \RTF\DB($container->config('db/db'), $container->config('db/user'), $container->config('db/pass'), $container->config('db/host'), $container->config('db/charset'));
 });
 
 
-$app->cli('import', 'CLI\IMDbImport');
-$app->cli('download', 'CLI\IMDbImport@download');
-$app->cli('extract', 'CLI\IMDbImport@extract');
+$app->cli('download', 'IMDbImport@download');
+$app->cli('extract', 'IMDbImport@extract');
+$app->cli('import', 'IMDbImport@import');
 
 
-$app->cli('test', function($a, $b) {
-    echo $a . " - ". $b . "\n";
+$app->cli('test', function() {
+    print_r("db: " . $this->config("db/db") . "\n");
 });
 
 $app->run();
