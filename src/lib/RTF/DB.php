@@ -173,6 +173,8 @@ class DB {
 
     public function insertMulti($table, $valuesArr) {
 
+        if (empty($valuesArr)) return;
+
         $columnNames = [];
         foreach ($valuesArr[0] as $key => $value) {
             $columnNames[] = $key;
