@@ -68,10 +68,13 @@ class IMDbImport extends \RTF\Controller {
 
     }
 
-    public function import() {
+    public function importAll() {
         //$this->importNames();
         //$this->importTitles();
         //$this->importTitleAkas();
+        //$this->importEpisodes();
+        //$this->importRatings();
+        $this->importPrincipals();
     }
 
     public function importNames() {
@@ -294,8 +297,6 @@ class IMDbImport extends \RTF\Controller {
         // tt0000001	1	        Карменсіта	                                        UA	    \N	        imdbDisplay	    \N	        0
         // tt12854886	3	        Arsène Lapin et le collier de la princesse indienne	FR	    \N	        alternative	    \N	        0
 
-
-
         $numberItems = $this->helper->getFileLines($this->tmpDir . "title.akas.tsv") - 1;
         echo "Inserting " . $numberItems . " Title AKAs... \n";
 
@@ -440,6 +441,250 @@ class IMDbImport extends \RTF\Controller {
         }
 
     }
+
+
+    public function importEpisodes() {
+        // tconst	    parentTconst	seasonNumber	episodeNumber
+        // tt0020666	tt15180956	    1	            2
+
+
+        $numberItems = $this->helper->getFileLines($this->tmpDir . "title.episode.tsv") - 1;
+        echo "Inserting " . $numberItems . " Episodes... \n";
+
+        $startTime = microtime(true);
+
+        $this->db->execute("TRUNCATE TABLE episodes");
+
+
+        $row = -1;
+        $episodeInserts = [];
+        if (($handle = fopen($this->tmpDir . "title.episode.tsv", "r")) !== FALSE) {
+            while (($data = fgetcsv($handle, 0, "\t")) !== FALSE) {
+                $row++;
+                if ($row == 0) continue;
+
+                $episodeInserts[] = [
+                    'id'                => $data[0],
+                    'parent_id'         => $data[1],
+                    'season_number'     => intval($data[2]) == 0 ? null : $data[2],
+                    'episode_number'    => intval($data[3]) == 0 ? null : $data[3]
+                ];
+
+
+                if ($row % 10000 == 0) {
+                    $this->db->insertMulti("episodes", $episodeInserts);
+                    $episodeInserts = [];
+                }
+
+                if ($row % 1000 == 0) {
+                    $nowTime = microtime(true);
+                    $elapsedTime = $nowTime - $startTime;
+                    $titlesPerSecond = ($row / $elapsedTime);
+                    $titlesLeft = $numberItems - $row;
+                    $secondsLeft = intval($titlesLeft / $titlesPerSecond);
+                    echo chr(27) . "[0G"; // replace current line
+                    echo "\rInserted " . $row . " / " . $numberItems . " Episodes. Time left: " . $this->helper->formatTime($secondsLeft) . "                ";
+                }
+
+
+            }
+            fclose($handle);
+
+            // some left?
+            if (!empty($episodeInserts)) {
+                $this->db->insertMulti("episodes", $episodeInserts);
+            }
+
+            echo "\nInserted " . $row . " Episodes\n";
+        }
+
+    }
+
+
+    //public function importRatings() {
+    public function importRatings() {
+        // tconst	    averageRating	numVotes
+        // tt0000001	5.7	            1882
+
+
+        $numberItems = $this->helper->getFileLines($this->tmpDir . "title.ratings.tsv") - 1;
+        echo "Adding " . $numberItems . " Ratings... \n";
+
+        $startTime = microtime(true);
+
+
+        $row = -1;
+        if (($handle = fopen($this->tmpDir . "title.ratings.tsv", "r")) !== FALSE) {
+            while (($data = fgetcsv($handle, 0, "\t")) !== FALSE) {
+                $row++;
+                if ($row == 0) continue;
+
+                $this->db->update('titles', [
+                    'average_rating'    => floatval($data[1]),
+                    'num_votes'         => intval($data[2])
+                ],
+                [
+                    'id'    => $data[0]
+                ]);
+
+
+                if ($row % 1000 == 0) {
+                    $nowTime = microtime(true);
+                    $elapsedTime = $nowTime - $startTime;
+                    $titlesPerSecond = ($row / $elapsedTime);
+                    $titlesLeft = $numberItems - $row;
+                    $secondsLeft = intval($titlesLeft / $titlesPerSecond);
+                    echo chr(27) . "[0G"; // replace current line
+                    echo "\rInserted " . $row . " / " . $numberItems . " Episodes. Time left: " . $this->helper->formatTime($secondsLeft) . "                ";
+                }
+
+
+            }
+            fclose($handle);
+
+            echo "\nInserted " . $row . " Episodes\n";
+        }
+
+    }
+
+    public function importPrincipals() {
+        // tconst	    ordering	nconst	    category	job	            characters
+        // tt0796739	2	        nm0494784	actor	    \N	            ["Giovani Pietro Carafa","Pedro de Arbues","Pope Gregry IX"]
+        // tt3020244	7	        nm1039199	writer	    co-adaptation	\N
+
+        $numberItems = $this->helper->getFileLines($this->tmpDir . "title.principals.tsv") - 1;
+        echo "Inserting " . $numberItems . " Principals... \n";
+
+        $startTime = microtime(true);
+
+        $this->db->execute("TRUNCATE TABLE principals");
+
+        $this->db->execute("TRUNCATE TABLE categories");
+        $this->db->execute("TRUNCATE TABLE jobs");
+
+        $this->db->execute("TRUNCATE TABLE principals_characters");
+
+
+        $row = -1;
+        $principalInserts = [];
+
+        $categoryInserts = [];
+        $existingCategories = [];
+
+        $jobInserts = [];
+        $existingJobs = [];
+
+        $principalsCharactersInserts = [];
+
+        if (($handle = fopen($this->tmpDir . "title.principals.tsv", "r")) !== FALSE) {
+            while (($data = fgetcsv($handle, 0, "\t")) !== FALSE) {
+                $row++;
+                if ($row == 0) continue;
+
+                $principalId    = $row;
+                $categoryId     = $data[3] == "\\N" ? null : preg_replace('/[[:^print:]]/', '', strtolower(str_replace(" ", "_", $data[3])));
+                $jobId          = $data[4] == "\\N" ? null : preg_replace('/[[:^print:]]/', '', strtolower(str_replace(" ", "_", $data[4])));
+
+
+                if (strlen($categoryId) > 100 || strlen($jobId) > 100) continue;
+
+                $existingPrincipalsCharacters = [];
+
+                $principalInserts[] = [
+                    'id'            => $principalId,
+                    'title_id'      => $data[0],
+                    'name_id'       => $data[2],
+                    'ordering'      => $data[1],
+                    'category_id'   => $categoryId,
+                    'job_id'        => $jobId,
+                ];
+
+                if ($categoryId && !in_array($categoryId, $existingCategories)) {
+                    $categoryInserts[] = [
+                        'code' => $categoryId,
+                        'display_name' => ucwords(str_replace("_", " ", $categoryId))
+                    ];
+                    $existingCategories[] = $categoryId;
+                }
+
+                if ($jobId && !in_array($jobId, $existingJobs)) {
+                    $jobInserts[] = [
+                        'code' => $jobId,
+                        'display_name' => ucwords(str_replace("_", " ", $jobId))
+                    ];
+                    $existingJobs[] = $jobId;
+                }
+
+                if ($data[5] !== "\\N") {
+                    $possibleNewCharacters = json_decode($data[5], true);
+                    foreach ($possibleNewCharacters as $possibleNewCharacter) {
+                        $characterId = substr(preg_replace('/[[:^print:]]/', '', strtolower(str_replace(" ", "_", $possibleNewCharacter))), 0, 50);
+                        $principalsCharactersId = $principalId . '_' . $characterId;
+
+                        if (!in_array($principalsCharactersId, $existingPrincipalsCharacters)) {
+                            $principalsCharactersInserts[] = [
+                                'principal_id' => $principalId,
+                                'character_display_name' => $possibleNewCharacter
+                            ];
+                            $existingPrincipalsCharacters[] = $principalsCharactersId;
+                        }
+
+                    }
+                }
+
+
+                if ($row % 10000 == 0) {
+                    $this->db->insertMulti("principals", $principalInserts);
+                    $principalInserts = [];
+
+                    $this->db->insertMulti("categories", $categoryInserts);
+                    $categoryInserts = [];
+
+                    $this->db->insertMulti("jobs", $jobInserts);
+                    $jobInserts = [];
+
+                    $this->db->insertMulti("principals_characters", $principalsCharactersInserts);
+                    $principalsCharactersInserts = [];
+
+                }
+
+                if ($row % 1000 == 0) {
+                    $nowTime = microtime(true);
+                    $elapsedTime = $nowTime - $startTime;
+                    $titlesPerSecond = ($row / $elapsedTime);
+                    $titlesLeft = $numberItems - $row;
+                    $secondsLeft = intval($titlesLeft / $titlesPerSecond);
+                    echo chr(27) . "[0G"; // replace current line
+                    echo "\rInserted " . $row . " / " . $numberItems . " Principals. Time left: " . $this->helper->formatTime($secondsLeft) . "                ";
+                }
+
+
+            }
+            fclose($handle);
+
+            // some left?
+            if (!empty($principalInserts)) {
+                $this->db->insertMulti("principals", $principalInserts);
+            }
+
+            if (!empty($categoryInserts)) {
+                $this->db->insertMulti("categories", $categoryInserts);
+            }
+
+            if (!empty($jobInserts)) {
+                $this->db->insertMulti("jobs", $jobInserts);
+            }
+
+            if (!empty($principalsCharactersInserts)) {
+                $this->db->insertMulti("principals_characters", $principalsCharactersInserts);
+            }
+
+            echo "\nInserted " . $row . " Principals\n";
+        }
+
+
+    }
+
 
 
 

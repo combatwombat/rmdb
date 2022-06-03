@@ -13,7 +13,14 @@ $app->container->set("db", function($container) {
 
 $app->cli('download', 'IMDbImport@download');
 $app->cli('extract', 'IMDbImport@extract');
-$app->cli('import', 'IMDbImport@import');
+
+$app->cli('import-all', 'IMDbImport@importAll');
+$app->cli('import-titles', 'IMDbImport@importTitles');
+$app->cli('import-title-akas', 'IMDbImport@importTitleAkas');
+$app->cli('import-episodes', 'IMDbImport@importEpisodes');
+$app->cli('import-ratings', 'IMDbImport@importRatings'); // needs titles first
+$app->cli('import-principals', 'IMDbImport@importPrincipals');
+
 
 
 $app->cli('test', function() {
