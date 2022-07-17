@@ -61,6 +61,25 @@ See `config/schema.sql` which pretty much maps to the [IMDb dataset schema](http
 | Bruce Banner |
 | Hulk |
 
+### What's the genre distribution per year?
+
+    SELECT start_year, COUNT(*) AS count FROM titles
+    LEFT JOIN titles_genres AS tg1 ON tg1.title_id = titles.id
+    WHERE tg1.genre_id = "drama" -- repeat for a few genres
+    
+    -- Exclude tv episodes etc.
+    AND title_type = "movie"
+    
+    AND start_year < YEAR(CURRENT_DATE())
+    
+    GROUP BY start_year
+    ORDER BY start_year ASC;
+
+Although after 2000 the amount of movies made, or listed in IMDb, rises rapidly, so the data might need some normalization. Or limit to before 2000 like here:
+
+
+
+
 ### The 50 highest rated horror comedies
 
     SELECT CONCAT("[", primary_title, "](https://www.imdb.com/title/", id, ")") AS primary_title, start_year, average_rating, num_votes FROM titles
@@ -69,7 +88,7 @@ See `config/schema.sql` which pretty much maps to the [IMDb dataset schema](http
     WHERE tg1.genre_id = "horror"
     AND tg2.genre_id = "comedy"
     
-    -- Exclude tv episodes etc.
+    -- Exclude TV episodes etc.
     AND title_type = "movie"
     
     -- Exclude little voted on movies where average_rating is often too high. Higher num_votes = more popular
@@ -140,7 +159,7 @@ Note: No Star Wars, it only has Action, Adventure and Fantasy genres.
     LEFT JOIN titles_genres AS tg1 ON tg1.title_id = titles.id
     WHERE tg1.genre_id = "sci-fi"
     
-    -- Exclude tv episodes etc.
+    -- Exclude TV episodes etc.
     AND title_type = "movie"
     
     -- Exclude little voted on movies where average_rating is often too high. Higher num_votes = more popular
