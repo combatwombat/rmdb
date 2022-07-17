@@ -257,26 +257,26 @@ Note: No Star Wars, it only has Action, Adventure and Fantasy genres.
 
 ## &lt;clickbait&gt;The 10 worst directors that somehow keep making movies&lt;/clickbait&gt;
 
-SELECT  CONCAT("[",d_name,"](https://www.imdb.com/name/",name_id, ")") AS name,
-        ROUND(avg, 2) as average_rating,
-        movies FROM (
-            SELECT  name_id,
-                    n.primary_name AS d_name,
-                    (SUM(t.average_rating) / COUNT(*)) AS avg,
-                    COUNT(*) AS movies
-            FROM principals
-            LEFT JOIN names AS n ON n.id = name_id
-            LEFT JOIN titles AS t ON t.id = title_id
-            WHERE category_id = "director"
-            AND t.title_type = "movie"
-            AND t.num_votes > 1000
-            AND n.death_year IS NULL
-            GROUP BY name_id
+    SELECT  CONCAT("[",d_name,"](https://www.imdb.com/name/",name_id, ")") AS name,
+            ROUND(avg, 2) as average_rating,
+            movies FROM (
+                SELECT  name_id,
+                        n.primary_name AS d_name,
+                        (SUM(t.average_rating) / COUNT(*)) AS avg,
+                        COUNT(*) AS movies
+                FROM principals
+                LEFT JOIN names AS n ON n.id = name_id
+                LEFT JOIN titles AS t ON t.id = title_id
+                WHERE category_id = "director"
+                AND t.title_type = "movie"
+                AND t.num_votes > 1000
+                AND n.death_year IS NULL
+                GROUP BY name_id
+                ORDER BY avg ASC
+            ) AS t
+            WHERE movies > 10
             ORDER BY avg ASC
-        ) AS t
-        WHERE movies > 10
-        ORDER BY avg ASC
-LIMIT 10;
+    LIMIT 10;
 
 
 | name | average_rating | movies |
