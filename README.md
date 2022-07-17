@@ -257,37 +257,39 @@ Note: No Star Wars, it only has Action, Adventure and Fantasy genres.
 
 ## &lt;clickbait&gt;The 10 worst directors that somehow keep making movies&lt;/clickbait&gt;
 
-    SELECT CONCAT("[",d_name,"](https://www.imdb.com/name/",name_id, ")") AS name, avg as average_rating, movies FROM (
-        SELECT  name_id, 
-                n.primary_name AS d_name,
-                (SUM(t.average_rating) / COUNT(*)) AS avg,
-                COUNT(*) AS movies 
-        FROM principals
-        LEFT JOIN names AS n ON n.id = name_id
-        LEFT JOIN titles AS t ON t.id = title_id
-        WHERE category_id = "director"
-        AND t.title_type = "movie"
-        AND t.num_votes > 1000
-        AND n.death_year IS NULL
-        GROUP BY name_id
-        ORDER BY avg ASC
+SELECT  CONCAT("[",d_name,"](https://www.imdb.com/name/",name_id, ")") AS name,
+        ROUND(avg, 2) as average_rating,
+        movies FROM (
+            SELECT  name_id,
+                    n.primary_name AS d_name,
+                    (SUM(t.average_rating) / COUNT(*)) AS avg,
+                    COUNT(*) AS movies
+            FROM principals
+            LEFT JOIN names AS n ON n.id = name_id
+            LEFT JOIN titles AS t ON t.id = title_id
+            WHERE category_id = "director"
+            AND t.title_type = "movie"
+            AND t.num_votes > 1000
+            AND n.death_year IS NULL
+            GROUP BY name_id
+            ORDER BY avg ASC
         ) AS t
-    WHERE movies > 10
-    ORDER BY avg ASC
-    LIMIT 10;
+        WHERE movies > 10
+        ORDER BY avg ASC
+LIMIT 10;
 
 
 | name | average_rating | movies |
 |------|----------------|--------|
-| [Uwe Boll](https://www.imdb.com/name/nm0093051) | 3.6034482594194084 | 29 |
-| [Fred Olen Ray](https://www.imdb.com/name/nm0676248) | 3.7000000260092993 | 11 |
-| [Albert Pyun](https://www.imdb.com/name/nm0089502) | 4.146428602082389 | 28 |
-| [Bert I. Gordon](https://www.imdb.com/name/nm0330026) | 4.158333261807759 | 12 |
-| [Timothy Woodward Jr.](https://www.imdb.com/name/nm1914394) | 4.190909038890492 | 11 |
-| [Jim Wynorski](https://www.imdb.com/name/nm0691061) | 4.250000017029898 | 14 |
-| [Nico Mastorakis](https://www.imdb.com/name/nm0557789) | 4.30666667620341 | 15 |
-| [Charles Band](https://www.imdb.com/name/nm0023929) | 4.515384655732375 | 13 |
-| [Steven C. Miller](https://www.imdb.com/name/nm1921345) | 4.636363636363637 | 11 |
-| [Gregory Hatanaka](https://www.imdb.com/name/nm0368693) | 4.7272727922959765 | 11 |
+| [Uwe Boll](https://www.imdb.com/name/nm0093051) | 3.603 | 29 |
+| [Fred Olen Ray](https://www.imdb.com/name/nm0676248) | 3.7 | 11 |
+| [Albert Pyun](https://www.imdb.com/name/nm0089502) | 4.146 | 28 |
+| [Bert I. Gordon](https://www.imdb.com/name/nm0330026) | 4.158 | 12 |
+| [Timothy Woodward Jr.](https://www.imdb.com/name/nm1914394) | 4.191 | 11 |
+| [Jim Wynorski](https://www.imdb.com/name/nm0691061) | 4.25 | 14 |
+| [Nico Mastorakis](https://www.imdb.com/name/nm0557789) | 4.307 | 15 |
+| [Charles Band](https://www.imdb.com/name/nm0023929) | 4.515 | 13 |
+| [Steven C. Miller](https://www.imdb.com/name/nm1921345) | 4.636 | 11 |
+| [Gregory Hatanaka](https://www.imdb.com/name/nm0368693) | 4.727 | 11 |
 
 
