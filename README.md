@@ -131,3 +131,69 @@ See `config/schema.sql` which pretty much maps to the [IMDb dataset schema](http
 | [Mayhem](https://www.imdb.com/title/tt4348012) | 2017 | 6.4 | 20928 |
 | [The Babysitter](https://www.imdb.com/title/tt4225622) | 2017 | 6.3 | 89374 |
 | [Dead Snow](https://www.imdb.com/title/tt1278340) | 2009 | 6.3 | 66839 |
+
+## Popular Sci-Fi movies of the 70s
+
+Note: No Star Wars, it only has Action, Adventure and Fantasy genres.
+
+    SELECT CONCAT("[", primary_title, "](https://www.imdb.com/title/", id, ")") AS primary_title, start_year, average_rating, num_votes FROM titles
+    LEFT JOIN titles_genres AS tg1 ON tg1.title_id = titles.id
+    WHERE tg1.genre_id = "sci-fi"
+    
+    -- Exclude tv episodes etc.
+    AND title_type = "movie"
+    
+    -- Exclude little voted on movies where average_rating is often too high. Higher num_votes = more popular
+    AND num_votes > 10000
+    
+    AND start_year >= 1970
+    AND start_year <= 1979
+    
+    ORDER BY average_rating DESC, num_votes DESC;
+
+| primary_title | start_year | average_rating | num_votes |
+|---------------|------------|----------------|-----------|
+| [Alien](https://www.imdb.com/title/tt0078748) | 1979 | 8.5 | 855270 |
+| [A Clockwork Orange](https://www.imdb.com/title/tt0066921) | 1971 | 8.3 | 811076 |
+| [Ivan Vasilyevich Changes His Profession](https://www.imdb.com/title/tt0070233) | 1973 | 8.2 | 16458 |
+| [Stalker](https://www.imdb.com/title/tt0079944) | 1979 | 8.1 | 131654 |
+| [Solaris](https://www.imdb.com/title/tt0069293) | 1972 | 8 | 89827 |
+| [Fantastic Planet](https://www.imdb.com/title/tt0070544) | 1973 | 7.7 | 30480 |
+| [Close Encounters of the Third Kind](https://www.imdb.com/title/tt0075860) | 1977 | 7.6 | 198472 |
+| [Superman](https://www.imdb.com/title/tt0078346) | 1978 | 7.4 | 172371 |
+| [Invasion of the Body Snatchers](https://www.imdb.com/title/tt0077745) | 1978 | 7.4 | 59190 |
+| [The Andromeda Strain](https://www.imdb.com/title/tt0066769) | 1971 | 7.2 | 36803 |
+| [Sleeper](https://www.imdb.com/title/tt0070707) | 1973 | 7.1 | 42854 |
+| [Time After Time](https://www.imdb.com/title/tt0080025) | 1979 | 7.1 | 18387 |
+| [Soylent Green](https://www.imdb.com/title/tt0070723) | 1973 | 7 | 64000 |
+| [The Boys from Brazil](https://www.imdb.com/title/tt0077269) | 1978 | 7 | 27798 |
+| [Westworld](https://www.imdb.com/title/tt0070909) | 1973 | 6.9 | 57182 |
+| [The Stepford Wives](https://www.imdb.com/title/tt0073747) | 1975 | 6.9 | 17631 |
+| [Mad Max](https://www.imdb.com/title/tt0079501) | 1979 | 6.8 | 204229 |
+| [Logan's Run](https://www.imdb.com/title/tt0074812) | 1976 | 6.8 | 56057 |
+| [The Brood](https://www.imdb.com/title/tt0078908) | 1979 | 6.8 | 29614 |
+| [Slaughterhouse-Five](https://www.imdb.com/title/tt0069280) | 1972 | 6.8 | 13000 |
+| [THX 1138](https://www.imdb.com/title/tt0066434) | 1971 | 6.7 | 51240 |
+| [Phantasm](https://www.imdb.com/title/tt0079714) | 1979 | 6.6 | 36464 |
+| [Silent Running](https://www.imdb.com/title/tt0067756) | 1972 | 6.6 | 28965 |
+| [The Man Who Fell to Earth](https://www.imdb.com/title/tt0074851) | 1976 | 6.6 | 26180 |
+| [Rollerball](https://www.imdb.com/title/tt0073631) | 1975 | 6.6 | 24752 |
+| [Horror Express](https://www.imdb.com/title/tt0068713) | 1972 | 6.5 | 10758 |
+| [Star Trek: The Motion Picture](https://www.imdb.com/title/tt0079945) | 1979 | 6.4 | 89032 |
+| [The Omega Man](https://www.imdb.com/title/tt0067525) | 1971 | 6.4 | 31325 |
+| [Shivers](https://www.imdb.com/title/tt0073705) | 1975 | 6.4 | 20837 |
+| [A Boy and His Dog](https://www.imdb.com/title/tt0072730) | 1975 | 6.4 | 17756 |
+| [Escape from the Planet of the Apes](https://www.imdb.com/title/tt0067065) | 1971 | 6.3 | 35051 |
+| [Rabid](https://www.imdb.com/title/tt0076590) | 1977 | 6.3 | 18535 |
+| [The Fury](https://www.imdb.com/title/tt0077588) | 1978 | 6.3 | 15211 |
+| [Moonraker](https://www.imdb.com/title/tt0079574) | 1979 | 6.2 | 99575 |
+| [Death Race 2000](https://www.imdb.com/title/tt0072856) | 1975 | 6.2 | 27669 |
+| [Dark Star](https://www.imdb.com/title/tt0069945) | 1974 | 6.2 | 24315 |
+| [Conquest of the Planet of the Apes](https://www.imdb.com/title/tt0068408) | 1972 | 6.1 | 32523 |
+| [The Crazies](https://www.imdb.com/title/tt0069895) | 1973 | 6.1 | 13134 |
+| [Beneath the Planet of the Apes](https://www.imdb.com/title/tt0065462) | 1970 | 6 | 46579 |
+| [The Black Hole](https://www.imdb.com/title/tt0078869) | 1979 | 5.9 | 25455 |
+| [Piranha](https://www.imdb.com/title/tt0078087) | 1978 | 5.9 | 21507 |
+| [Zardoz](https://www.imdb.com/title/tt0070948) | 1974 | 5.8 | 22467 |
+| [Futureworld](https://www.imdb.com/title/tt0074559) | 1976 | 5.7 | 10713 |
+| [Battle for the Planet of the Apes](https://www.imdb.com/title/tt0069768) | 1973 | 5.4 | 30854 |
