@@ -38,7 +38,7 @@ See `config/schema.sql` which pretty much maps to the [IMDb dataset schema](http
 | names_primaryprofessions | Maps names to professions |
 | names_knownfortitles | Maps people to titles they are most known for |
 | titleakas | Foreign language / additional titles |
-| titleakaattributes | Type of additional titles like *Fake Working Title*, *Berlin Film festival Title* |
+| titleakaattributes | Type of additional titles like *Fake Working Title*, *Berlin Film Festival Title* |
 | titleakatypes | Smaller list of title types, similar to titleakaattributes, like *Alternative*, *Working*, *IMDb Display* |
 | titleakas_titleakaattributes | Maps titleakaattributes to titleakas |
 | titleakas_titleakatypes | Maps titleakas to titleakatypes |
