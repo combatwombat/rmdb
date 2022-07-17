@@ -20,12 +20,13 @@ $app->cli('import-ratings', 'IMDbImport@importRatings');
 $app->cli('import-principals', 'IMDbImport@importPrincipals');
 
 $app->cli([null, 'help'], function() {
-    echo "rmdb - Imports IMDb datasets into relational database for easy querying.\n\n";
+    echo "rmdb - Imports IMDb datasets into relational database for easy querying\n\n";
     echo "Usage:\n";
     echo "- Create MySQL database, import config/schema.sql\n";
     echo "- Enter DB details in config/config.json\n";
     echo "- php index.php [command]\n\n";
     echo "Commands:\n";
+    echo "help\t\t\t- Print this help\n";
     echo "download\t\t- Download zipped TSV files from datasets.imdbws.com. Needs 1.5GB+ of storage\n";
     echo "extract\t\t\t- Extract zipped TSV files. Needs 7GB+ of storage\n";
     echo "import-all\t\t- Import everything, replace existing data. Runs all the below commands:\n";
@@ -35,7 +36,6 @@ $app->cli([null, 'help'], function() {
     echo "import-episodes\t\t- Import episode <> show/series relation\n";
     echo "import-ratings\t\t- Import average ratings for titles\n";
     echo "import-principals\t- Import directory, writers. Should be redundant if you import names\n";
-    echo "help\t\t\t- Print his help\n";
 });
 
 $app->run();
