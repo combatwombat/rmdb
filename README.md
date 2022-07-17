@@ -256,7 +256,11 @@ Note: No Star Wars, it only has Action, Adventure and Fantasy genres.
 ## &lt;clickbait&gt;The 10 worst directors that somehow keep making movies&lt;/clickbait&gt;
 
     SELECT CONCAT("[",d_name,"](https://www.imdb.com/name/",name_id, ")") AS name, avg as average_rating, movies FROM (
-        SELECT name_id, n.primary_name AS d_name, (SUM(t.average_rating) / COUNT(*)) AS avg, COUNT(*) AS movies FROM principals
+        SELECT  name_id, 
+                n.primary_name AS d_name,
+                (SUM(t.average_rating) / COUNT(*)) AS avg,
+                COUNT(*) AS movies 
+        FROM principals
         LEFT JOIN names AS n ON n.id = name_id
         LEFT JOIN titles AS t ON t.id = title_id
         WHERE category_id = "director"
