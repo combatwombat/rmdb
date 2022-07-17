@@ -43,6 +43,10 @@ See `config/schema.sql` which pretty much maps to the [IMDb dataset schema](http
 | episodes     | Connects episode titles to their shows |
 
 
+## Todo
+
+Get more data from other databases like [TMDB](https://www.themoviedb.org/). Country of origin and language would be very useful. But this probably needs to be imported one-by-one via their API.
+
 ## Examples
 
 ### Which characters did *Mark Ruffalo* Play in *Thor: Ragnarok*?
