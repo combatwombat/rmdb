@@ -53,20 +53,22 @@ Get more data from other databases like [TMDB](https://www.themoviedb.org/). Cou
 
 ### What's the genre distribution per year?
 
-    SELECT start_year,
-           COUNT(*) AS count
-    FROM   titles
-           LEFT JOIN titles_genres AS tg1
-                  ON tg1.title_id = titles.id
-    WHERE  tg1.genre_id = "drama" -- repeat for a few genres
-    
-           -- Exclude tv episodes etc.
-           AND title_type = "movie"
-    
-           AND start_year < Year(CURRENT_DATE())
-    
-    GROUP  BY start_year
-    ORDER  BY start_year ASC; 
+```mysql
+SELECT start_year,
+       COUNT(*) AS count
+FROM   titles
+       LEFT JOIN titles_genres AS tg1
+              ON tg1.title_id = titles.id
+WHERE  tg1.genre_id = "drama" -- repeat for a few genres
+
+       -- Exclude tv episodes etc.
+       AND title_type = "movie"
+
+       AND start_year < YEAR(CURRENT_DATE())
+
+GROUP  BY start_year
+ORDER  BY start_year ASC; 
+```
 
 Although after 2000 the amount of movies made, or listed in IMDb, rises rapidly, so the data might need some normalization. Or limit to before 2000 like here:
 
@@ -74,23 +76,25 @@ Although after 2000 the amount of movies made, or listed in IMDb, rises rapidly,
 
 ### The 10 most prolific directors of well-rated movies in the 60s
 
-    SELECT n.primary_name AS name,
-           COUNT(*)       AS movies
-    FROM   principals
-           LEFT JOIN names AS n
-                  ON n.id = name_id
-           LEFT JOIN titles AS t
-                  ON t.id = title_id
-    WHERE  category_id = "director"
-           AND t.title_type = "movie"
-           AND t.start_year >= 1960
-           AND t.start_year <= 1969
-           AND t.runtime_minutes >= 90
-           AND t.average_rating > 6
-           AND t.num_votes > 10000
-    GROUP  BY name_id
-    ORDER  BY movies DESC
-    LIMIT  10; 
+```sql
+SELECT n.primary_name AS name,
+       COUNT(*)       AS movies
+FROM   principals
+       LEFT JOIN names AS n
+              ON n.id = name_id
+       LEFT JOIN titles AS t
+              ON t.id = title_id
+WHERE  category_id = "director"
+       AND t.title_type = "movie"
+       AND t.start_year >= 1960
+       AND t.start_year <= 1969
+       AND t.runtime_minutes >= 90
+       AND t.average_rating > 6
+       AND t.num_votes > 10000
+GROUP  BY name_id
+ORDER  BY movies DESC
+LIMIT  10; 
+```
 
 | name | movies |
 |------|--------|
