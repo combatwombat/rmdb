@@ -10,7 +10,7 @@ Imports IMDb datasets into relational database for easy querying
     help			- Print this help
     download		- Download zipped TSV files from datasets.imdbws.com. Needs 1.5GB+ of storage  
     extract			- Extract zipped TSV files. Needs 7GB+ of storage  
-    import-all		- Import everything, replace existing data. Runs all the below commands:  
+    import		        - Import everything, replace existing data. Runs all the below commands:  
     import-names		- Import cast & crew  
     import-titles		- Import movies, TV episodes, short films, ...  
     import-titles-akas	- Import foreign names for titles  

@@ -1,7 +1,7 @@
 #
 # SQL Export
 # Created by Querious (301010)
-# Created: 17. July 2022 at 13:34:40 CEST
+# Created: 17. July 2022 at 14:35:19 CEST
 # Encoding: Unicode (UTF-8)
 #
 
@@ -76,7 +76,8 @@ CREATE TABLE `names` (
   `death_year` int unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `birth_year_index` (`birth_year`) USING BTREE,
-  KEY `death_year_index` (`death_year`) USING BTREE
+  KEY `death_year_index` (`death_year`) USING BTREE,
+  FULLTEXT KEY `primary_name_index` (`primary_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -175,7 +176,8 @@ CREATE TABLE `titles` (
   KEY `average_rating_index` (`average_rating`) USING BTREE,
   KEY `num_votes_index` (`num_votes`) USING BTREE,
   KEY `start_year_index` (`start_year`) USING BTREE,
-  KEY `runtime_minutes_index` (`runtime_minutes`) USING BTREE
+  KEY `runtime_minutes_index` (`runtime_minutes`) USING BTREE,
+  FULLTEXT KEY `primary_title_index` (`primary_title`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -201,5 +203,5 @@ SET SQL_MODE = @ORIG_SQL_MODE;
 
 
 
-# Export Finished: 17. July 2022 at 13:34:40 CEST
+# Export Finished: 17. July 2022 at 14:35:19 CEST
 

@@ -27,7 +27,7 @@ class IMDbImport extends \RTF\Controller {
 
         $this->extract();
 
-        $this->importAll();
+        $this->import();
     }
 
     public function download() {
@@ -66,7 +66,7 @@ class IMDbImport extends \RTF\Controller {
 
     }
 
-    public function importAll() {
+    public function import() {
         $this->importNames();
         $this->importTitles();
         $this->importTitleAkas();
