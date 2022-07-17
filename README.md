@@ -262,6 +262,7 @@ Note: No Star Wars, it only has Action, Adventure and Fantasy genres.
         WHERE category_id = "director"
         AND t.title_type = "movie"
         AND t.num_votes > 1000
+        AND n.death_year IS NULL
         GROUP BY name_id
         ORDER BY avg ASC
         ) AS t
@@ -279,7 +280,8 @@ Note: No Star Wars, it only has Action, Adventure and Fantasy genres.
 | [Timothy Woodward Jr.](https://www.imdb.com/name/nm1914394) | 4.190909038890492 | 11 |
 | [Jim Wynorski](https://www.imdb.com/name/nm0691061) | 4.250000017029898 | 14 |
 | [Nico Mastorakis](https://www.imdb.com/name/nm0557789) | 4.30666667620341 | 15 |
-| [Joe D'Amato](https://www.imdb.com/name/nm0001090) | 4.3866666952768965 | 15 |
 | [Charles Band](https://www.imdb.com/name/nm0023929) | 4.515384655732375 | 13 |
 | [Steven C. Miller](https://www.imdb.com/name/nm1921345) | 4.636363636363637 | 11 |
+| [Gregory Hatanaka](https://www.imdb.com/name/nm0368693) | 4.7272727922959765 | 11 |
+
 
