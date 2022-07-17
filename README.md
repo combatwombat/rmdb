@@ -77,8 +77,7 @@ See `config/schema.sql` which pretty much maps to the [IMDb dataset schema](http
 
 Although after 2000 the amount of movies made, or listed in IMDb, rises rapidly, so the data might need some normalization. Or limit to before 2000 like here:
 
-
-
+<img width="829" alt="western-scifi-horror" src="https://user-images.githubusercontent.com/26400/179400898-0013149b-04dd-49f3-9cc8-3e8e0ca58cb4.png">
 
 ### The 50 highest rated horror comedies
 
