@@ -76,7 +76,7 @@ Although after 2000 the amount of movies made, or listed in IMDb, rises rapidly,
 
 ### The 10 most prolific directors of well-rated movies in the 60s
 
-```mysql
+```sql
 SELECT n.primary_name AS name,
        COUNT(*)       AS movies
 FROM   principals
@@ -115,28 +115,30 @@ LIMIT  10;
 
 ### The 50 highest rated horror comedies
 
-    SELECT CONCAT("[", primary_title, "](https://www.imdb.com/title/", id, ")") AS
-           primary_title,
-           start_year,
-           average_rating,
-           num_votes
-    FROM   titles
-           LEFT JOIN titles_genres AS tg1
-                  ON tg1.title_id = titles.id
-           LEFT JOIN titles_genres AS tg2
-                  ON tg2.title_id = titles.id
-    WHERE  tg1.genre_id = "horror"
-           AND tg2.genre_id = "comedy"
+```sql
+SELECT CONCAT("[", primary_title, "](https://www.imdb.com/title/", id, ")") AS
+       primary_title,
+       start_year,
+       average_rating,
+       num_votes
+FROM   titles
+       LEFT JOIN titles_genres AS tg1
+              ON tg1.title_id = titles.id
+       LEFT JOIN titles_genres AS tg2
+              ON tg2.title_id = titles.id
+WHERE  tg1.genre_id = "horror"
+       AND tg2.genre_id = "comedy"
 
-           -- Exclude TV episodes etc.
-           AND title_type = "movie"
-           
-           -- Exclude little voted on movies where average_rating is often too high. Higher num_votes = more popular
-           AND num_votes > 20000
+       -- Exclude TV episodes etc.
+       AND title_type = "movie"
+       
+       -- Exclude little voted on movies where average_rating is often too high. Higher num_votes = more popular
+       AND num_votes > 20000
 
-    ORDER  BY average_rating DESC,
-              num_votes DESC
-    LIMIT  50; 
+ORDER  BY average_rating DESC,
+          num_votes DESC
+LIMIT  50; 
+```
 
 | primary_title | start_year | average_rating | num_votes |
 |---------------|------------|----------------|-----------|
@@ -195,27 +197,29 @@ LIMIT  10;
 
 Note: No Star Wars, it only has Action, Adventure and Fantasy genres.
 
-    SELECT CONCAT("[", primary_title, "](https://www.imdb.com/title/", id, ")") AS
-           primary_title,
-           start_year,
-           average_rating,
-           num_votes
-    FROM   titles
-           LEFT JOIN titles_genres AS tg1
-                  ON tg1.title_id = titles.id
-    WHERE  tg1.genre_id = "sci-fi"
+```sql
+SELECT CONCAT("[", primary_title, "](https://www.imdb.com/title/", id, ")") AS
+       primary_title,
+       start_year,
+       average_rating,
+       num_votes
+FROM   titles
+       LEFT JOIN titles_genres AS tg1
+              ON tg1.title_id = titles.id
+WHERE  tg1.genre_id = "sci-fi"
 
-           -- Exclude TV episodes etc.
-           AND title_type = "movie"
+       -- Exclude TV episodes etc.
+       AND title_type = "movie"
 
-           -- Exclude little voted on movies where average_rating is often too high. Higher num_votes = more popular
-           AND num_votes > 10000
+       -- Exclude little voted on movies where average_rating is often too high. Higher num_votes = more popular
+       AND num_votes > 10000
 
-           AND start_year >= 1970
-           AND start_year <= 1979
+       AND start_year >= 1970
+       AND start_year <= 1979
 
-    ORDER  BY average_rating DESC,
-              num_votes DESC; 
+ORDER  BY average_rating DESC,
+          num_votes DESC; 
+```              
 
 | primary_title | start_year | average_rating | num_votes |
 |---------------|------------|----------------|-----------|
@@ -266,28 +270,29 @@ Note: No Star Wars, it only has Action, Adventure and Fantasy genres.
 
 ## &lt;clickbait&gt;The 10 worst directors that somehow keep making movies&lt;/clickbait&gt;
 
-    SELECT CONCAT("[", d_name, "](https://www.imdb.com/name/", name_id, ")") AS name,
-           ROUND(avg, 2) AS average_rating,
-           movies
-    FROM   (SELECT name_id,
-                   n.primary_name                       AS d_name,
-                   ( SUM(t.average_rating) / COUNT(*) ) AS avg,
-                   COUNT(*)                             AS movies
-            FROM   principals
-                   LEFT JOIN names AS n
-                          ON n.id = name_id
-                   LEFT JOIN titles AS t
-                          ON t.id = title_id
-            WHERE  category_id = "director"
-                   AND t.title_type = "movie"
-                   AND t.num_votes > 1000
-                   AND n.death_year IS NULL
-            GROUP  BY name_id
-            ORDER  BY avg ASC) AS t
-    WHERE  movies > 10
-    ORDER  BY avg ASC
-    LIMIT  10; 
-
+```sql
+SELECT CONCAT("[", d_name, "](https://www.imdb.com/name/", name_id, ")") AS name,
+       ROUND(avg, 2) AS average_rating,
+       movies
+FROM   (SELECT name_id,
+               n.primary_name                       AS d_name,
+               ( SUM(t.average_rating) / COUNT(*) ) AS avg,
+               COUNT(*)                             AS movies
+        FROM   principals
+               LEFT JOIN names AS n
+                      ON n.id = name_id
+               LEFT JOIN titles AS t
+                      ON t.id = title_id
+        WHERE  category_id = "director"
+               AND t.title_type = "movie"
+               AND t.num_votes > 1000
+               AND n.death_year IS NULL
+        GROUP  BY name_id
+        ORDER  BY avg ASC) AS t
+WHERE  movies > 10
+ORDER  BY avg ASC
+LIMIT  10; 
+```
 
 | name | average_rating | movies |
 |------|----------------|--------|
