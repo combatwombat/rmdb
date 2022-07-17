@@ -1,5 +1,7 @@
 # rmdb 
-Imports IMDb datasets into relational database for easy querying
+Imports IMDb datasets into a relational database for easy querying.
+
+Don't host this somewhere publicly accessible, otherwise you run afoul of IMDb's licensing terms for their datasets.
 
 ## Usage:
 - Create MySQL database, import `config/schema.sql`
