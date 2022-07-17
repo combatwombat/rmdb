@@ -35,7 +35,7 @@ $app->cli([null, 'help'], function() {
     echo "import-titles-akas\t- Import foreign names for titles\n";
     echo "import-episodes\t\t- Import episode <> show/series relation\n";
     echo "import-ratings\t\t- Import average ratings for titles\n";
-    echo "import-principals\t- Import directory, writers. Should be redundant if you import names\n";
+    echo "import-principals\t- Import directors, writers. Should be redundant if you import names\n";
 });
 
 $app->run();

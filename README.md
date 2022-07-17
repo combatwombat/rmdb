@@ -18,7 +18,7 @@ Don't host this somewhere publicly accessible, otherwise you run afoul of IMDb's
     import-titles-akas	- Import foreign names for titles  
     import-episodes		- Import episode <> show/series relation  
     import-ratings		- Import average ratings for titles  
-    import-principals	- Import directory, writers. Should be redundant if you import names
+    import-principals	- Import directors, writers. Should be redundant if you import names
 
 ## Schema
 
