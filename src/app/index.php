@@ -20,7 +20,7 @@ $app->cli('import-ratings', 'IMDbImport@importRatings');
 $app->cli('import-principals', 'IMDbImport@importPrincipals');
 
 $app->cli([null, 'help'], function() {
-    echo "rmdb - Imports IMDb datasets into relational database for easy querying\n\n";
+    echo "rmdb 0.1 - Imports IMDb datasets into relational database for easy querying\n\n";
     echo "Usage:\n";
     echo "- Create MySQL database, import config/schema.sql\n";
     echo "- Enter DB details in config/config.json\n";
