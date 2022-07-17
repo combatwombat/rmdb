@@ -211,7 +211,8 @@ WHERE  tg1.genre_id = "sci-fi"
        -- Exclude TV episodes etc.
        AND title_type = "movie"
 
-       -- Exclude little voted on movies where average_rating is often too high. Higher num_votes = more popular
+       -- Exclude little voted on movies where average_rating is often too high. 
+       -- Higher num_votes = more popular
        AND num_votes > 10000
 
        AND start_year >= 1970
