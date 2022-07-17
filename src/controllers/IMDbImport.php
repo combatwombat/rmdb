@@ -656,7 +656,6 @@ class IMDbImport extends \RTF\Controller {
                     echo "\rInserted " . $row . " / " . $numberItems . " Principals. Time left: " . $this->helper->formatTime($secondsLeft) . "                ";
                 }
 
-
             }
             fclose($handle);
 
@@ -680,12 +679,6 @@ class IMDbImport extends \RTF\Controller {
             echo "\nInserted " . $row . " Principals\n";
         }
 
-
     }
-
-
-
-
-
 
 }

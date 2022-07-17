@@ -1,6 +1,4 @@
 <?php
-
-
 $app = require __DIR__ . '/../lib/RTF.php';
 
 $app->container->set('config', '\RTF\Config');
@@ -9,7 +7,6 @@ $app->container->set('helper', '\RTF\Helper');
 $app->container->set("db", function($container) {
     return new \RTF\DB($container->config('db/db'), $container->config('db/user'), $container->config('db/pass'), $container->config('db/host'), $container->config('db/charset'));
 });
-
 
 $app->cli('download', 'IMDbImport@download');
 $app->cli('extract', 'IMDbImport@extract');
@@ -21,7 +18,6 @@ $app->cli('import-title-akas', 'IMDbImport@importTitleAkas');
 $app->cli('import-episodes', 'IMDbImport@importEpisodes');
 $app->cli('import-ratings', 'IMDbImport@importRatings');
 $app->cli('import-principals', 'IMDbImport@importPrincipals');
-
 
 $app->cli([null, 'help'], function() {
     echo "rmdb - Imports IMDb datasets into relational database for easy querying.\n\n";
