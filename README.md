@@ -51,22 +51,6 @@ Get more data from other databases like [TMDB](https://www.themoviedb.org/). Cou
 
 ## Examples
 
-### Which characters did *Mark Ruffalo* Play in *Thor: Ragnarok*?
-
-    SELECT character_display_name FROM principals_characters 
-    WHERE principal_id = (
-        SELECT id FROM principals 
-        WHERE title_id =
-            (SELECT id FROM titles WHERE title_type = "movie" AND primary_title = "Thor: Ragnarok")
-        AND name_id =
-            (SELECT id FROM names WHERE primary_name = "Mark Ruffalo")
-    )
-
-| character_display_name |
-|------|
-| Bruce Banner |
-| Hulk |
-
 ### What's the genre distribution per year?
 
     SELECT start_year, COUNT(*) AS count FROM titles
