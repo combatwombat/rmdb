@@ -45,7 +45,7 @@ See `config/schema.sql` which pretty much maps to the [IMDb dataset schema](http
 
 ## Todo
 
-Get more data from other databases like [TMDB](https://www.themoviedb.org/). Country of origin and language would be very useful. But this probably needs to be imported one-by-one via their API.
+Get more data from other databases like [TMDB](https://www.themoviedb.org/). Country of origin, language and box-office would be interesting. But this probably needs to be imported one-by-one via their API.
 
 ## Examples
 
@@ -82,6 +82,39 @@ Get more data from other databases like [TMDB](https://www.themoviedb.org/). Cou
 Although after 2000 the amount of movies made, or listed in IMDb, rises rapidly, so the data might need some normalization. Or limit to before 2000 like here:
 
 <img width="829" alt="western-scifi-horror" src="https://user-images.githubusercontent.com/26400/179400898-0013149b-04dd-49f3-9cc8-3e8e0ca58cb4.png">
+
+### The 10 most prolific directors of well-rated movies in the 60s
+
+    SELECT n.primary_name AS name, COUNT(*) AS movies FROM principals
+    LEFT JOIN names AS n ON n.id = name_id
+    LEFT JOIN titles AS t ON t.id = title_id
+    WHERE category_id = "director"
+    AND t.title_type = "movie"
+    AND t.start_year >= 1960
+    AND t.start_year <= 1969
+    AND t.runtime_minutes >= 90
+    AND t.average_rating > 6
+    AND t.num_votes > 10000
+    GROUP BY name_id
+    ORDER BY movies DESC
+    LIMIT 10;
+
+| name | movies |
+|------|--------|
+| Jean-Luc Godard | 7 |
+| Blake Edwards | 6 |
+| Akira Kurosawa | 5 |
+| Michelangelo Antonioni | 5 |
+| Alfred Hitchcock | 5 |
+| John Frankenheimer | 5 |
+| Stanley Kramer | 4 |
+| Robert Aldrich | 4 |
+| Sergio Leone | 4 |
+| Roman Polanski | 4 |
+
+
+
+
 
 ### The 50 highest rated horror comedies
 
@@ -219,3 +252,35 @@ Note: No Star Wars, it only has Action, Adventure and Fantasy genres.
 | [Zardoz](https://www.imdb.com/title/tt0070948) | 1974 | 5.8 | 22467 |
 | [Futureworld](https://www.imdb.com/title/tt0074559) | 1976 | 5.7 | 10713 |
 | [Battle for the Planet of the Apes](https://www.imdb.com/title/tt0069768) | 1973 | 5.4 | 30854 |
+
+## &lt;clickbait&gt;The 10 worst directors that somehow keep making movies&lt;/clickbait&gt;
+
+    SELECT CONCAT("[",d_name,"](https://www.imdb.com/name/",name_id, ")") AS name, avg as average_rating, movies FROM (
+        SELECT name_id, n.primary_name AS d_name, (SUM(t.average_rating) / COUNT(*)) AS avg, COUNT(*) AS movies FROM principals
+        LEFT JOIN names AS n ON n.id = name_id
+        LEFT JOIN titles AS t ON t.id = title_id
+        WHERE category_id = "director"
+        AND t.title_type = "movie"
+        AND t.num_votes > 1000
+        GROUP BY name_id
+        ORDER BY avg ASC
+        ) AS t
+    WHERE movies > 10
+    AND avg < 6
+    ORDER BY avg ASC
+    LIMIT 10;
+
+
+| name | average_rating | movies |
+|------|----------------|--------|
+| [Uwe Boll](https://www.imdb.com/name/nm0093051) | 3.6034482594194084 | 29 |
+| [Fred Olen Ray](https://www.imdb.com/name/nm0676248) | 3.7000000260092993 | 11 |
+| [Albert Pyun](https://www.imdb.com/name/nm0089502) | 4.146428602082389 | 28 |
+| [Bert I. Gordon](https://www.imdb.com/name/nm0330026) | 4.158333261807759 | 12 |
+| [Timothy Woodward Jr.](https://www.imdb.com/name/nm1914394) | 4.190909038890492 | 11 |
+| [Jim Wynorski](https://www.imdb.com/name/nm0691061) | 4.250000017029898 | 14 |
+| [Nico Mastorakis](https://www.imdb.com/name/nm0557789) | 4.30666667620341 | 15 |
+| [Joe D'Amato](https://www.imdb.com/name/nm0001090) | 4.3866666952768965 | 15 |
+| [Charles Band](https://www.imdb.com/name/nm0023929) | 4.515384655732375 | 13 |
+| [Steven C. Miller](https://www.imdb.com/name/nm1921345) | 4.636363636363637 | 11 |
+
