@@ -8,7 +8,7 @@
   },
   "auth": {
     "token": {
-      "key": "key",
+      "key": "unneeded-for-rmdb",
       "expires": 2592000
     }
   }

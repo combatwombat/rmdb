@@ -12,8 +12,18 @@ class CLI {
         $this->commands = [];
     }
 
-    public function add($command, $callback) {
-        $this->commands[$command] = $callback;
+    // add a callback for a command string, or array of commands
+    public function add($commands, $callback) {
+        if (!is_array($commands)) {
+            $commands = [$commands];
+        }
+        foreach ($commands as $command) {
+            if ($command) {
+                $this->commands[$command] = $callback;
+            } else {
+                $this->commands['{no-command-default}'] = $callback;
+            }
+        }
     }
 
     public function execute() {
@@ -27,6 +37,11 @@ class CLI {
                 if ($command === $cliCommand) {
                     $this->callCallback($callback, $params);
                 }
+            }
+        } else {
+            $callback = $this->commands['{no-command-default}'];
+            if ($callback) {
+                $this->callCallback($callback, []);
             }
         }
     }

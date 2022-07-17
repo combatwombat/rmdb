@@ -27,9 +27,7 @@ class IMDbImport extends \RTF\Controller {
 
         $this->extract();
 
-        $this->import();
-
-        //echo $this->config->get('db/db');
+        $this->importAll();
     }
 
     public function download() {
@@ -69,11 +67,11 @@ class IMDbImport extends \RTF\Controller {
     }
 
     public function importAll() {
-        //$this->importNames();
-        //$this->importTitles();
-        //$this->importTitleAkas();
-        //$this->importEpisodes();
-        //$this->importRatings();
+        $this->importNames();
+        $this->importTitles();
+        $this->importTitleAkas();
+        $this->importEpisodes();
+        $this->importRatings();
         $this->importPrincipals();
     }
 
@@ -535,14 +533,14 @@ class IMDbImport extends \RTF\Controller {
                     $titlesLeft = $numberItems - $row;
                     $secondsLeft = intval($titlesLeft / $titlesPerSecond);
                     echo chr(27) . "[0G"; // replace current line
-                    echo "\rInserted " . $row . " / " . $numberItems . " Episodes. Time left: " . $this->helper->formatTime($secondsLeft) . "                ";
+                    echo "\rInserted " . $row . " / " . $numberItems . " Ratings. Time left: " . $this->helper->formatTime($secondsLeft) . "                ";
                 }
 
 
             }
             fclose($handle);
 
-            echo "\nInserted " . $row . " Episodes\n";
+            echo "\nInserted " . $row . " Ratings\n";
         }
 
     }

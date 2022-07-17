@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Rob's Tiny Framework
- * robertgerlach.net 2020
+ * Rob's Tiny Framework v0.1
+ * gerlach.dev 2022
  */
 include __DIR__ . '/RTF/autoload.php';
 
