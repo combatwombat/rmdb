@@ -116,8 +116,7 @@ LIMIT  10;
 ### The 50 highest rated horror comedies
 
 ```sql
-SELECT CONCAT("[", primary_title, "](https://www.imdb.com/title/", id, ")") AS
-       primary_title,
+SELECT CONCAT("[", primary_title, "](https://www.imdb.com/title/", id, ")") AS primary_title,
        start_year,
        average_rating,
        num_votes
@@ -132,7 +131,8 @@ WHERE  tg1.genre_id = "horror"
        -- Exclude TV episodes etc.
        AND title_type = "movie"
        
-       -- Exclude little voted on movies where average_rating is often too high. Higher num_votes = more popular
+       -- Exclude little voted on movies where average_rating is often too high. 
+       -- Higher num_votes = more popular
        AND num_votes > 20000
 
 ORDER  BY average_rating DESC,
