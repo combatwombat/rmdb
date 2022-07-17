@@ -1,7 +1,7 @@
 #
 # SQL Export
 # Created by Querious (301010)
-# Created: 17. July 2022 at 14:35:19 CEST
+# Created: 17. July 2022 at 19:56:48 CEST
 # Encoding: Unicode (UTF-8)
 #
 
@@ -58,7 +58,8 @@ CREATE TABLE `episodes` (
 CREATE TABLE `genres` (
   `id` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   `display_name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `id_index` (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -203,5 +204,5 @@ SET SQL_MODE = @ORIG_SQL_MODE;
 
 
 
-# Export Finished: 17. July 2022 at 14:35:19 CEST
+# Export Finished: 17. July 2022 at 19:56:48 CEST
 
