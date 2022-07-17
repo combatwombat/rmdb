@@ -277,7 +277,7 @@ SELECT CONCAT("[", d_name, "](https://www.imdb.com/name/", name_id, ")") AS name
        movies
 FROM   (SELECT name_id,
                n.primary_name                       AS d_name,
-               ( SUM(t.average_rating) / COUNT(*) ) AS avg,
+               SUM(t.average_rating) / COUNT(*)     AS avg,
                COUNT(*)                             AS movies
         FROM   principals
                LEFT JOIN names AS n
