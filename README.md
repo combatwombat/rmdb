@@ -53,7 +53,7 @@ Get more data from other databases like [TMDB](https://www.themoviedb.org/). Cou
 
 ### What's the genre distribution per year?
 
-```mysql
+```sql
 SELECT start_year,
        COUNT(*) AS count
 FROM   titles
@@ -76,7 +76,7 @@ Although after 2000 the amount of movies made, or listed in IMDb, rises rapidly,
 
 ### The 10 most prolific directors of well-rated movies in the 60s
 
-```sql
+```mysql
 SELECT n.primary_name AS name,
        COUNT(*)       AS movies
 FROM   principals
