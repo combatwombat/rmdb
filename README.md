@@ -266,7 +266,6 @@ Note: No Star Wars, it only has Action, Adventure and Fantasy genres.
         ORDER BY avg ASC
         ) AS t
     WHERE movies > 10
-    AND avg < 6
     ORDER BY avg ASC
     LIMIT 10;
 
