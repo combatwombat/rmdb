@@ -23,7 +23,7 @@ Imports IMDb datasets into relational database for easy querying
 See `config/schema.sql` which pretty much maps to the [IMDb dataset schema](https://www.imdb.com/interfaces/):
 
 | Table        | Description |
-------------------------------
+|--------------|-------------|
 | titles | All the movies, short films, episodes |
 | genres       | All genres. Action, Sci-Fi, Comedy, ... |
 | titles_genres | Maps titles to genres |
@@ -57,7 +57,7 @@ See `config/schema.sql` which pretty much maps to the [IMDb dataset schema](http
     )
 
 | character_display_name |
---------------------------
+|------|
 | Bruce Banner |
 | Hulk |
 
