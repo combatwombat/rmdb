@@ -4,9 +4,7 @@ $app = require __DIR__ . '/../lib/RTF.php';
 $app->container->set('config', '\RTF\Config');
 $app->container->set('helper', '\RTF\Helper');
 
-$app->container->set("db", function($container) {
-    return new \RTF\DB($container->config('db/db'), $container->config('db/user'), $container->config('db/pass'), $container->config('db/host'), $container->config('db/charset'));
-});
+$app->container->set("db", new \RTF\DB($app->container->config('db.db'), $app->container->config('db.user'), $app->container->config('db.pass'), $app->container->config('db.host'), $app->container->config('db.charset')));
 
 $app->cli('download', 'IMDbImport@download');
 $app->cli('extract', 'IMDbImport@extract');
